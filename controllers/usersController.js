@@ -37,7 +37,7 @@ const validateUser = [
 
 exports.usersListGet = (req, res) => {
 	res.render('index', {
-		title: 'User list',
+		title: 'User List',
 		users: usersStorage.getUsers(),
 	});
 };
@@ -45,6 +45,29 @@ exports.usersListGet = (req, res) => {
 exports.usersCreateGet = (req, res) => {
 	res.render('createUser', {
 		title: 'Create User',
+	});
+};
+
+exports.usersSearchGet = (req, res) => {
+	const { name } = req.query;
+
+	if (!name) {
+		return res.render('searchUser', {
+			title: 'Search User',
+			users: undefined,
+		});
+	}
+
+	const users = usersStorage.getUsers();
+	const filteredUsers = users.filter((user) =>
+		`${user.firstName} ${user.lastName}`
+			.toLowerCase()
+			.includes(name.toLowerCase())
+	);
+
+	res.render('searchUser', {
+		title: 'Search User',
+		users: filteredUsers,
 	});
 };
 
